@@ -125,6 +125,11 @@ class ViewResponseListener extends TemplateListener
 
         $response = $viewHandler->handle($view, $request);
 
+        if ($request->getRequestFormat() && $request->query->get("callback")) {
+            $response->setContent($request->query->get('callback') . "(" . $response->getContent() .")");
+            $response->headers->set('Content-Type', 'application/javascript');           
+        }
+
         $event->setResponse($response);
     }
 }
